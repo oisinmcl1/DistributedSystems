@@ -1,0 +1,51 @@
+Oisin Mc Laughlin
+22441106
+
+Exercise 1
+
+When to use Reference vs Pointer?
+
+Use Reference:
+Object must exist
+Never change what it refers to.
+
+Use Pointer:
+Object may be optional (can be null)
+Can change what it points to.
+
+Can reference be null?
+NO, reference must always refer to a valid object.
+
+Can reference be reassigned?
+NO, once reference is set to object it can only refer to that object.
+
+Syntax Differences?
+
+Reference:
+void func_ref(int &ref);
+func_ref(var);
+
+Pointer:
+void func_ptr(int *ptr);
+func_ptr(&var);
+
+Also have to dereference in pointer function.
+
+
+Exercise 2
+
+When are stack objects destroyed?
+Automatically destroyed when they go out of scope.
+
+When are heap objects destroyed?
+Must be manually destroyed using delete.
+
+What happens if you forget to delete a heap object?
+Memory leak occurs, memory remains allocated until program ends.
+
+Why is stack allocation faster than heap allocation?
+Stack allocation is faster because it simply involves moving the stack pointer, while heap allocation requires searching (more work).
+
+When to use stack vs heap allocation?
+Use stack for small, short-lived objects.
+Use heap for large objects or objects that need to persist beyond the scope they were created in.
