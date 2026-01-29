@@ -1,0 +1,102 @@
+Oisin Mc Laughlin
+22441106
+
+Part 1
+
+1. Memory Leak
+Memory leaks everytime that func is called, memory is never freed.
+You will run out of memory.
+
+2. Error Handling
+Memory leaks at client 3, it is never freed.
+Clients 1, 2, and 4 free their memory correctly.
+
+3. Programmer Burden
+6
+Memory leak.
+
+4. Compare to Java
+Java garbage collector automatically frees memory that is no longer referenced.
+In C, the programmer must manually free memory, which can lead to memory leaks if not handled.
+
+
+Part 2
+
+5. Automatic Cleanup
+Destructors run when an object goes out of scope, freeing resources automatically.
+No need to call delete when using stack allocation.
+
+6. Comparison
+Part 2 is safer as destructors ensure resources are freed automatically.
+Part 1 requires manual memory management, increasing the risk of memory leaks.
+
+7. Error Handling
+When error occurs, the resource is destroyed this time and memory is freed.
+All other clients also free their memory correctly.
+
+8. Problem Discovery
+Limitations of stack allocation include; Limited Size, Stack Overflow, Cannot outlive scope.
+
+
+Part 3
+
+9. Smart Pointer Behavior
+Destructors are called with make unique when the unique pointer goes out of scope.
+You do not need to manually call delete as the unique pointer manages the memory.
+Using new requires manual deletion.
+
+10. Comparison to Raw Pointers
+Smart pointers automatically manage memory, reducing the risk of leaks which is safer than raw pointers.
+Resources are cleaned up even when exceptions occur, unlike raw pointers.
+
+11. Ownership Model and Move Semantics
+Unique enforces single ownership, preventing multiple pointers from managing the same resource.
+Copying a unique pointer is not allowed and will throw an exception.
+Ownership can be transferred using std::move, original pointer becomes null after the move.
+It uses move when transferring message ownership to avoid copying.
+You can return a unique pointer from a function by transferring ownership to the caller.
+
+12. Use Cases
+You would use stack allocation for small, short-lived objects where performance is critical.
+Unique pointers are ideal for dynamic resources that require exclusive ownership and automatic cleanup.
+simulateMessageQueue uses unique pointers to manage message lifetimes safely and efficiently.
+Unique pointer reduces memory leaks over using new and delete by automating memory management.
+
+
+Part 4
+
+13. Reference Counting
+Connection object is deleted when the last shared pointer referencing it is destroyed.
+Comparing this to Java Garbage collector, both uses references and when count is 0 it is destroyed.
+
+14. Shared Ownership
+You cannot use unique pointers for shared ownership as they enforce single ownership.
+When you try assigning a unique pointer to another, it results in a compilation error.
+You would use shared pointers when multiple parts of code need to share access to the same resource.
+
+15. Broadcast Scenario
+Shared pointers are suitable for broadcasting messages to multiple clients as they allow multiple references to the same resource
+Compilation error occurs when trying to use unique pointers for shared ownership.
+
+16. Performance Overhead
+Shared pointers have performance overhead due to reference counting.
+The performance overhead is justified when shared ownership is required to prevent memory leaks.
+
+
+Extra
+
+17. RAII Pattern
+RAII stands for Resource Acquisition Is Initialization.
+It is a programming idiom where resource allocation is tied to object lifetime.
+Destructors are used to release resources when the object goes out of scope.
+
+18. Design Decision
+In a message queue system, using unique pointers ensures exclusive ownership of messages, preventing accidental sharing.
+
+19. Memory Safety
+Stack Allocation, Unique Pointer, Shared Pointer, Raw Pointer.
+
+20. Java Comparison
+Shared pointer is similar to Java's garbage collector in that both manage memory automatically based on references.
+Unique pointer is different from Java's memory management as it enforces exclusive ownership, unlike Java's shared references.
+Java does not have an equivalent to unique pointers, as all objects are managed by the garbage collector.
