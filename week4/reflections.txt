@@ -1,0 +1,48 @@
+Oisin Mc Laughin
+22441106
+
+1. What changed when threads were introduced?
+
+Program changed from a simple sequential execution to parallel execution. Instead of multiple tasks being completed one after another, threads allow multiple tasks to be executed simultaneously, improving efficiency and performance.
+
+Had to manage thread creation and lifecycle, thread joining and synchronization
+
+Yes I noticed a small performance improvement when using threads for tasks that can be parallelized, I believe this fully depends on the nature of the tasks being executed.
+
+
+2. Why did race conditions occur?
+
+A race condition is when time sequence of events affects a program's correctness.
+
+shared_sum consisted of 3 steps; read cur value, add val to it and write back to shared_sum. If threads do this concurrently this can lead to lost updates where one thread's update overwrites another's.
+
+Counter incrementing, any kind of updating or reading shared data without proper synchronization I suppose.
+
+
+3. How did RAII help manage locks?
+
+Manual lock management is tedious and error prone, may lead to deadlocks or forgotten unlocks.
+
+std::lock automatically acquires the lock on creation and releases it on destruction.
+
+If an exception is thrown while the lock is held, the destructor will still be called, ensuring that the lock is released properly and preventing potential deadlocks or resource leaks.
+
+
+4. How does this resemble the Map-Reduce idea?
+
+Each thread independently processes its chunk of data, no comms between threads at this stage.
+
+After all threads completed their work, we combine partial sums into final result.
+
+Word counting in books or docs, image processing.
+
+
+5. What limitations does this approach have?
+
+If there are too many threads, overhead of thread management and context switching can outweigh benefits.
+
+Threads share memory within one process which cannot span to different machines.
+
+You would need to process data in chunks that fit in memory.
+
+Small tasks or sequential tasks.
