@@ -1,0 +1,41 @@
+Oisin Mc Laughlin
+22441106
+
+1) Why broadcast configuration (like a filename) instead of sending it rank-by-rank?
+MPI_Bcast allows you to send the configuration data to all ranks in a single operation, which is more efficient than sending it rank-by-rank using point-to-point communication.
+
+2) Why is no mutex needed around the final sum in MPI?
+Each rank computes its local sum independently, and then the final reduction operation (like MPI_Reduce) combines these local sums into a global sum without the need for mutexes, as the reduction operation is designed to handle concurrent updates safely.
+
+3) Which partitioning is used here: block or cyclic?
+Block partitioning is used here, where each rank processes a contiguous block of data. This is evident from the way the data is divided and assigned to ranks.
+
+4) Why does MPI_Reduce scale better than sequential Send/Recv?
+Combines partials into a tree, multiple ranks can contribute to the reduction simultaneously, reducing the overall time compared to sequential Send/Recv where each rank would have to wait for the previous one to finish before sending its data.
+
+5) What happens when you run more ranks than data partitions?
+Ranks w/o partition will contribute nothing to final sum.
+
+6) Why does console output appear out of rank order?
+No synchronization is enforced on the print statements, so the output can appear in any order depending on when each rank reaches its print statement.
+
+7) What do the timestamps measure versus the print order?
+Timestamp captured when work finishes for multiple reasons. It reflects computation completion time.
+
+8) Why do Parts 2-4 show similar total times despite different communication?
+File I/O issue with reading from same file. Faster comms do not help if file reading is the bottleneck.
+
+9) Which phase should you time separately, and why?
+Time the computation phase separately from the communication phase to identify which part is the bottleneck and to better understand the performance characteristics of each phase.
+
+10) Why can oversubscription stop improving performance?
+More ranks than CPU cores or data partitions can add extra overhead without being useful.
+
+11) What is the key change in Part 5, and how does MPI_Reduce differ from Gather and Send/Recv?
+I/O is done in parallel as each rank reads its own partition. MPI_Reduce combines local into global in single operation, while Gather collects all data to one rank and Send/Recv requires multiple point-to-point communications.
+
+12) In MPI_Scatterv, why do only rank 0 send buffers matter?
+Root rank is allocated the send buffer, and other ranks receive their data from it. Non-root ranks do not need to provide send buffers as they are only receiving data.
+
+13) Why can Part 4 be slow even though it uses MPI_Scatterv and MPI_Gather?
+Rank 0 still has to read entire file and delegate to other ranks which can be bottleneck.
